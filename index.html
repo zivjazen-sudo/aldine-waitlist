@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>ALDINE — Drop 01 list. Live a life worth living.</title>
-  <meta name="description" content="Aldine is quiet dark-luxury menswear for men 18–26, sold only as complete sets. Drop 01: one shirt-and-chino set, $250, preorder around March 2027. Join the list." />
-  <meta property="og:title" content="ALDINE — Built in silence." />
-  <meta property="og:description" content="One set. One price. One honest date. Drop 01 preorder around March 2027. The list hears first." />
+  <title>ALDINE — Drop 01. Live a life worth living.</title>
+  <meta name="description" content="Aldine Drop 01 is one set: a cream linen shirt and a tan chino, made to be worn together. $250. Preorder around March 2027. Join the list and hear it first." />
+  <meta property="og:title" content="ALDINE — Drop 01. Live a life worth living." />
+  <meta property="og:description" content="One shirt, one chino, made to go together. $250. Preorder around March 2027. The list hears first." />
   <meta property="og:type" content="website" />
   <!-- TODO(Jazen): og:image — export a 1200x630 tile once real sample photos exist. -->
-  <meta name="theme-color" content="#0E0D0C" />
+  <meta name="theme-color" content="#F4EFE7" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <!--
-    VARIANT C2 — "Ten seconds". Variant C's hero + form, then one short beat (who it's for, the set, honest terms)
-    and a minimal footer. Built for a ~10-second visit that ends in a sign-up.
-    Form logic, qualifiers, tags and tracking are identical to ../../index.html, except the page tag (drop01-list-c2)
-    and the optional "what draws you" chips, which now sit below the required fields.
-    Cut from C: long mission copy, specs, timeline, FAQ, "what the list gets", founder block, visible placeholders.
+    Aldine Drop 01 waitlist, v2 (Oct 2026). Light, warm palette for the summer set.
+    Order: hero line -> the Drop 01 set (product photo, labelled) -> a few mood shots (labelled as mood) -> the form -> one short beat.
+    Form logic, field names, honeypot, ?src tracking and the Google Sheet wiring are unchanged from v1.
   -->
   <style>
     /* ---- Tokens: Aldine palette, re-tuned toward Moderno's monochrome + sage ---- */
@@ -314,6 +312,79 @@
       .beat h2 { padding-left: 0; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+    /* ==== v2: light, warm palette for the Drop 01 summer set ====
+       Token names kept from v1: --ink is the page ground, --paper is the text colour. */
+    :root {
+      --ink: #F4EFE7;          /* warm paper ground */
+      --ink-2: #ECE5D9;        /* raised ground */
+      --paper: #1D1B18;        /* near-black text */
+      --muted: #5C564D;
+      --dim: #7F786D;
+      --sage: #8C7A5E;         /* warm stone for labels */
+      --amber: #A9803F;
+      --stone: #D8CBB5;        /* chino stone */
+      --line: rgba(29,27,24,.12);
+      --line-strong: rgba(29,27,24,.32);
+      --err: #A8432C;
+    }
+    body { background: var(--ink); }
+    header.site { background: rgba(244,239,231,.88); }
+    .logo, footer img { filter: invert(1); }
+    select option { background: #fff; color: var(--paper); }
+    .hero { min-height: 0; padding: 4.5rem 0 3rem; background: none; }
+    .hero h1 { font-size: clamp(2.1rem, 9.5vw, 5.4rem); letter-spacing: .16em; }
+    .hero .cue { margin-top: 2.2rem; }
+
+    /* The set: the one dark element on the page, so it reads as the product */
+    .set-sec { padding: 1rem 0 4.5rem; }
+    .set-card { width: min(60rem, calc(100% - 2 * var(--safe))); margin: 0 auto; background: #0B0B0A; color: #EDE9E1; display: grid; }
+    .set-card figure { position: relative; padding: 2rem 1.5rem 1rem; display: grid; place-items: center; }
+    .set-card img { width: auto; max-width: 100%; max-height: 74vh; }
+    .set-card .tag { position: absolute; top: 1rem; left: 1rem; font-size: .625rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; background: #EDE9E1; color: #0B0B0A; padding: .35rem .6rem; }
+    .set-info { padding: 1.6rem 1.5rem 2.2rem; }
+    .set-info .eyebrow { color: #C4B394; }
+    .set-info h2 { font-size: clamp(1.35rem, 4.6vw, 1.9rem); letter-spacing: .14em; margin: .8rem 0 1.4rem; }
+    .set-list2 { list-style: none; border-top: 1px solid rgba(237,233,225,.16); }
+    .set-list2 li { padding: 1rem 0; border-bottom: 1px solid rgba(237,233,225,.16); color: #CFC8BC; font-size: .95rem; }
+    .set-list2 li b { display: block; color: #EDE9E1; font-weight: 600; font-size: .6875rem; letter-spacing: .24em; text-transform: uppercase; margin-bottom: .2rem; }
+    .set-card .terms { justify-content: flex-start; margin: 1.6rem 0 0; }
+    .set-card .terms div { border-color: rgba(237,233,225,.16); padding: 0 1.2rem; }
+    .set-card .terms div:first-child { padding-left: 0; }
+    .set-card .terms dt { color: #C4B394; }
+    .set-card .fine { color: #A9A297; margin-top: 1.6rem; }
+
+    /* Mood: small, scattered, clearly not the product */
+    .mood { padding: 1rem 0 5rem; }
+    .mood .head2 { text-align: center; margin-bottom: 2.2rem; }
+    .mood .head2 p { color: var(--muted); max-width: 26rem; margin: .8rem auto 0; font-size: .95rem; }
+    .mood-grid { width: min(60rem, calc(100% - 2 * var(--safe))); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+    .mood-grid figure:nth-child(1) { grid-column: 1; }
+    .mood-grid figure:nth-child(2) { grid-column: 2; margin-top: 3.5rem; }
+    .mood-grid figure:nth-child(3) { grid-column: 1 / span 2; width: 62%; justify-self: center; margin-top: -1rem; }
+    .mood-grid img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: saturate(.8) sepia(.08); }
+    .mood-grid figure:nth-child(3) img { aspect-ratio: 1/1; }
+    .mood-grid figcaption { font-size: .7rem; }
+    .join-sec { background: var(--ink-2); }
+    .beat { padding-bottom: 6rem; }
+    .beat .honest { color: var(--paper); }
+    @media (min-width: 900px) {
+      .set-card { grid-template-columns: 1fr 1fr; align-items: center; }
+      .set-card figure { padding: 3rem 2rem; }
+      .set-info { padding: 3rem 3rem 3rem 1rem; }
+      .mood-grid { grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+      .mood-grid figure:nth-child(1) { grid-column: 1; margin-top: 4rem; }
+      .mood-grid figure:nth-child(2) { grid-column: 2; margin-top: 0; }
+      .mood-grid figure:nth-child(3) { grid-column: 3; width: 85%; justify-self: start; margin-top: 7rem; }
+      .beat { grid-template-columns: 34rem; }
+    }
+    @media (min-width: 1024px) { .hero { min-height: 0; padding: 6rem 0 4rem; } }
+    .set-card { background: #000; }
+    .set-card .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 0; max-width: 22rem; }
+    .set-card .terms div, .set-card .terms div:nth-child(3) { padding: 0 1rem; border-left: 1px solid rgba(237,233,225,.16); }
+    .set-card .terms div:nth-child(odd) { padding-left: 0; border-left: 0; }
+    .sticky { background: rgba(244,239,231,.97); }
+    @media (min-width: 900px) { .beat { justify-items: center; text-align: center; } }
   </style>
 </head>
 <!--
@@ -332,21 +403,62 @@
   </header>
 
   <main id="top">
-    <!-- 1. HERO: identity + honest terms, centred -->
+    <!-- 1. HERO: the line, then straight to the set -->
     <section class="hero">
       <div class="wrap center hero-copy">
-        <p class="eyebrow">Aldine · Drop 01 · The list</p>
-        <h1 class="display">Built in<br />silence.</h1>
+        <p class="eyebrow">Aldine · Drop 01</p>
+        <h1 class="display">Live a life<br />worth living.</h1>
         <hr class="rule" />
-        <p class="lead">Quiet, dark-luxury menswear for men <strong>18 to 26</strong> who are building something alone. Sold only as <strong>complete matching sets</strong>. Small tonal mark. Nothing loud.</p>
-        <dl class="terms" aria-label="Drop 01 at a glance">
-          <div><dt>The set</dt><dd>Shirt + chino</dd></div>
-          <div><dt>Price</dt><dd>$250 per set</dd></div>
-          <div><dt>How</dt><dd>Preorder</dd></div>
-          <div><dt>When</dt><dd>About Mar 2027</dd></div>
-        </dl>
-        <p class="fine">Planned first run of 100 sets, factory-made from our own tech packs. The list gets 48 hours of early access before the preorder opens to anyone else. That is the only perk. No discount codes.</p>
+        <p class="lead">Aldine makes <strong>matching sets</strong> for guys who are building something. Drop 01 is the first one. Light, clean, and easy to wear.</p>
         <p class="cue"><a class="btn" href="#join" data-cta="hero">Join the list</a></p>
+      </div>
+    </section>
+
+    <!-- 2. THE SET: the real Drop 01 product photo, labelled so it is never confused with the mood shots -->
+    <section class="set-sec" aria-labelledby="set-title">
+      <div class="set-card">
+        <figure>
+          <span class="tag">The Drop 01 set</span>
+          <img src="assets/drop01-set.jpg" alt="The Aldine Drop 01 set: a cream linen button-up shirt with the sleeves rolled, worn with tan chinos" width="640" height="1393" fetchpriority="high" />
+        </figure>
+        <div class="set-info">
+          <p class="eyebrow">This is the set</p>
+          <h2 class="display" id="set-title">One shirt. One chino. Made to go together.</h2>
+          <ul class="set-list2">
+            <li><b>The shirt</b>Cream linen button-up. Relaxed fit. Roll the sleeves or don't.</li>
+            <li><b>The chino</b>Tan linen-cotton. Straight leg. Sits clean with the shirt.</li>
+            <li><b>Sold together</b>You get both pieces. It's one outfit, not two separate buys.</li>
+          </ul>
+          <dl class="terms" aria-label="Drop 01 at a glance">
+            <div><dt>The set</dt><dd>Shirt + chino</dd></div>
+            <div><dt>Price</dt><dd>$250 per set</dd></div>
+            <div><dt>How</dt><dd>Preorder</dd></div>
+            <div><dt>When</dt><dd>About Mar 2027</dd></div>
+          </dl>
+          <p class="fine">The plan is 100 sets for the first run. People on the list get 48 hours to order before it opens to everyone else. That's the only perk. No discount codes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. MOOD: a few style references from Jazen's Drive, captioned so they read as mood, not product -->
+    <section class="mood" aria-label="The feel">
+      <div class="head2">
+        <p class="eyebrow">The feel</p>
+        <p>Warm days, stone steps, nowhere to be. This is the energy the set is made for.</p>
+      </div>
+      <div class="mood-grid">
+        <figure>
+          <img src="assets/mood-steps.jpg" alt="A man in cream trousers reading on old stone steps" width="640" height="851" loading="lazy" />
+          <figcaption>Mood reference. Not Aldine product.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/mood-sunset.jpg" alt="A man in a white shirt by the sea at sunset" width="512" height="900" loading="lazy" />
+          <figcaption>Mood reference. Not Aldine product.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/mood-detail.jpg" alt="Close-up of a rolled linen sleeve and a hand holding a glass" width="564" height="564" loading="lazy" />
+          <figcaption>Mood reference. Not Aldine product.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -354,9 +466,9 @@
     <section class="join-sec">
       <aside class="join" id="join" aria-labelledby="join-title">
           <div class="form-head">
-            <p class="eyebrow">Drop 01 list</p>
-            <h2 class="display" id="join-title">Hear first. Decide later.</h2>
-            <p class="sub">Build notes about twice a month, then the preorder date the moment it's real. Joining costs nothing and commits you to nothing.</p>
+            <p class="eyebrow">The list</p>
+            <h2 class="display" id="join-title">Hear it first.</h2>
+            <p class="sub">I'll send updates while I build it, and the preorder date as soon as it's real. Joining is free. You're not committing to anything.</p>
           </div>
 
           <!--
@@ -369,7 +481,7 @@
             <div class="field" data-field="email">
               <label for="email">Email</label>
               <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="email-msg" />
-              <p class="msg" id="email-msg" role="alert">Enter an email address that can receive a confirmation.</p>
+              <p class="msg" id="email-msg" role="alert">Enter a real email address.</p>
             </div>
 
             <div class="field" data-field="size">
@@ -382,21 +494,21 @@
                 <option value="XL">XL</option>
                 <option value="unsure">Not sure yet</option>
               </select>
-              <p class="msg" id="size-msg" role="alert">Pick a size, or "Not sure yet". It only helps plan the run.</p>
+              <p class="msg" id="size-msg" role="alert">Pick a size, or "Not sure yet". It just helps me plan how many to make.</p>
             </div>
 
             <div class="field" data-field="ack">
               <label class="ack" for="ack">
                 <input id="ack" name="ack" type="checkbox" value="yes" required aria-describedby="ack-msg" />
-                <span>I understand Drop 01 is a $250 preorder set.
-                  <small>Shirt and chino, sold together. Ships after the preorder window closes.</small></span>
+                <span>I get that Drop 01 is a $250 preorder set.
+                  <small>Shirt and chino, sold together. Ships after the preorder closes.</small></span>
               </label>
-              <p class="msg" id="ack-msg" role="alert">Tick this so we only email people who know what Drop 01 is.</p>
+              <p class="msg" id="ack-msg" role="alert">Tick this so I know you know what Drop 01 is.</p>
             </div>
 
             <!-- Optional qualifier, kept below the required fields (one tap, never blocks submit). Feeds lead_score. -->
             <fieldset class="field" data-field="draw">
-              <legend>What draws you to Aldine <span class="opt">· optional, one tap</span></legend>
+              <legend>What got you here <span class="opt">· optional, one tap</span></legend>
               <div class="chips">
                 <label class="chip"><input type="radio" name="draw" value="the-set" /><span>The set itself</span></label>
                 <label class="chip"><input type="radio" name="draw" value="the-mission" /><span>The mission</span></label>
@@ -416,15 +528,15 @@
 
             <button class="btn submit" type="submit" data-cta="form">Join the list</button>
             <p class="fine refund">Full refund any time before it ships.</p>
-            <p class="fine">We only email you about Aldine. One-click unsubscribe, always. We never share your email.
+            <p class="fine">I only email you about Aldine. Unsubscribe in one click. Your email never gets shared.
               <!-- TODO(Jazen): link a privacy policy page here before launch. --></p>
           </form>
 
           <div class="thanks" id="thanks" role="status" aria-live="polite" tabindex="-1">
             <p class="eyebrow" style="color:var(--amber)">You're in</p>
             <h2 class="display">You're on the list.</h2>
-            <p>We saved <b id="t-email" style="color:var(--paper)"></b> to the Drop 01 list. Nothing else to do.</p>
-            <p>First build notes go out in December. Until then, nothing.</p>
+            <p>Saved <b id="t-email" style="color:var(--paper)"></b>. That's it, nothing else to do.</p>
+            <p>First updates go out in December. No spam before that.</p>
             <div class="recap" id="t-recap"></div>
           </div>
       </aside>
@@ -439,16 +551,12 @@
       -->
     </section>
 
-    <!-- ONE BEAT: who it's for + the set + honest terms, then back to the form -->
+    <!-- ONE BEAT: who it's for + honest terms, then back to the form (no image) -->
     <section class="beat" aria-label="Who it's for">
-      <figure class="beat-fig">
-        <img src="assets/hero-field.jpg" alt="A lone man standing in tall grass, black and white" width="736" height="915" loading="lazy" />
-        <figcaption>Styling reference, not Aldine product.</figcaption>
-      </figure>
       <div class="beat-copy">
         <p class="eyebrow">Who it's for</p>
-        <h2 class="display">The climb, done quietly.</h2>
-        <p class="one">For men building something alone. One considered outfit, not one loud piece: the ALD-005 paper button-down and ALD-003 straight chino, sold only as a set.</p>
+        <h2 class="display">For the ones still building.</h2>
+        <p class="one">Aldine is for guys putting in the work when nobody's watching. No big logo. No hype. Just a set that makes you look like you have it together, even on the days you don't.</p>
         <p class="honest"><span>$250 set</span> · <span>preorder ~Mar 2027</span> · <span>no discounts</span> · <span>free to join</span></p>
         <a class="textlink" href="#join" data-cta="closing">Join the list</a>
       </div>

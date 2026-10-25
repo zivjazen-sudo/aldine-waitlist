@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ALDINE — Drop 01 list. Live a life worth living.</title>
+  <meta name="description" content="Aldine is quiet dark-luxury menswear for men 18–26, sold only as complete sets. Drop 01: one shirt-and-chino set, $250, preorder around March 2027. Join the list." />
+  <meta property="og:title" content="ALDINE — Built in silence." />
+  <meta property="og:description" content="One set. One price. One honest date. Drop 01 preorder around March 2027. The list hears first." />
+  <meta property="og:type" content="website" />
+  <!-- TODO(Jazen): og:image — export a 1200x630 tile once real sample photos exist. -->
+  <meta name="theme-color" content="#0E0D0C" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!--
+    VARIANT C2 — "Ten seconds". Variant C's hero + form, then one short beat (who it's for, the set, honest terms)
+    and a minimal footer. Built for a ~10-second visit that ends in a sign-up.
+    Form logic, qualifiers, tags and tracking are identical to ../../index.html, except the page tag (drop01-list-c2)
+    and the optional "what draws you" chips, which now sit below the required fields.
+    Cut from C: long mission copy, specs, timeline, FAQ, "what the list gets", founder block, visible placeholders.
+  -->
+  <style>
+    /* ---- Tokens: Aldine palette, re-tuned toward Moderno's monochrome + sage ---- */
+    :root {
+      --ink: #0C0C0C;          /* Aldine Ink, page ground */
+      --ink-2: #131312;        /* raised ground */
+      --charcoal: #1F1E1C;     /* Aldine Charcoal, darkened for panels */
+      --paper: #EDE9E1;        /* Aldine Paper, text + light panels */
+      --muted: #ABA69D;
+      --dim: #8A857D;
+      --sage: #A1ACAF;         /* Moderno's sage-grey, used for labels/subtitles */
+      --teal: #2E4A4F;         /* Aldine Teal, used sparingly */
+      --amber: #C49C5C;        /* Aldine Amber, only for "done"/checked states */
+      --line: rgba(237,233,225,.12);
+      --line-strong: rgba(237,233,225,.30);
+      --err: #e0937f;
+      --safe: 1.25rem;
+      --max: 1280px;
+      --hdr: 64px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--ink); color: var(--paper);
+      font-size: 1rem; line-height: 1.7; letter-spacing: .01em;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; }
+    button, input, select { font: inherit; color: inherit; }
+    :focus-visible { outline: 1px solid var(--paper); outline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .wrap { width: min(var(--max), calc(100% - 2 * var(--safe))); margin-inline: auto; }
+
+    /* Moderno type system: tracked caps, 600–700 weight, small sizes */
+    .eyebrow { font-weight: 600; font-size: .6875rem; letter-spacing: .3em; text-transform: uppercase; color: var(--sage); }
+    .display { font-weight: 700; text-transform: uppercase; letter-spacing: .2em; line-height: 1.15; }
+    .serif { font-family: "Source Serif 4", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
+
+    /* Buttons: Moderno outline + solid, square, 12px tracked caps */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+      border: 1px solid var(--paper); background: var(--paper); color: var(--ink);
+      padding: .95rem 2rem; min-height: 50px;
+      font-weight: 600; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; text-decoration: none;
+      cursor: pointer; transition: background .2s, color .2s, opacity .2s;
+    }
+    .btn:hover { background: transparent; color: var(--paper); }
+    .btn[disabled] { opacity: .6; cursor: progress; }
+    .btn-sm { min-height: 38px; padding: .5rem 1.1rem; font-size: .6875rem; }
+    .btn-ghost { background: transparent; color: var(--paper); border-color: var(--line-strong); }
+    .btn-ghost:hover { border-color: var(--paper); }
+
+    /* ---- The form (same markup as the original) ---- */
+    .join { margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid var(--line-strong); scroll-margin-top: 90px; }
+    .join h2 { font-size: 1.45rem; letter-spacing: .16em; margin: .7rem 0 .7rem; }
+    .join .sub { color: var(--muted); font-size: .95rem; margin-bottom: 1.8rem; max-width: 32rem; }
+    form { display: grid; gap: 1.5rem; }
+    .field label, .field legend { display: block; font-weight: 600; font-size: .625rem; letter-spacing: .26em; text-transform: uppercase; color: var(--sage); margin-bottom: .55rem; }
+    .field legend .opt, .field label .opt { color: var(--dim); letter-spacing: .14em; }
+    fieldset { border: 0; min-width: 0; }
+    input[type=email], select { width: 100%; min-height: 52px; background: var(--ink-2); border: 1px solid var(--line-strong); padding: .8rem 1rem; border-radius: 0; font-size: 1rem; -webkit-appearance: none; appearance: none; }
+    select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 2.5rem; }
+    input[type=email]:focus, select:focus { border-color: var(--paper); outline: none; }
+    .invalid input[type=email], .invalid select { border-color: var(--err); }
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip { position: relative; }
+    .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+    .field label.chip { display: inline-block; margin: 0; font-size: inherit; font-weight: 500; letter-spacing: normal; text-transform: none; color: inherit; }
+    .chip span { display: inline-block; padding: .6rem 1rem; border: 1px solid var(--line-strong); font-size: .875rem; color: var(--muted); cursor: pointer; transition: .15s; }
+    .chip span:hover { border-color: var(--paper); color: var(--paper); }
+    .chip input:checked + span { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+    .chip input:focus-visible + span { outline: 1px solid var(--paper); outline-offset: 3px; }
+    .field label.ack { display: grid; font-weight: 400; font-size: .95rem; letter-spacing: normal; text-transform: none; color: var(--paper); margin: 0; }
+    .ack { display: grid; grid-template-columns: 22px 1fr; gap: .8rem; align-items: start; cursor: pointer; }
+    .ack input { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; margin-top: .15rem; border: 1px solid var(--line-strong); background: var(--ink-2); cursor: pointer; display: grid; place-items: center; }
+    .ack input::after { content: ""; width: 6px; height: 11px; border: solid var(--ink); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px,-1px); opacity: 0; }
+    .ack input:checked { background: var(--paper); border-color: var(--paper); }
+    .ack input:checked::after { opacity: 1; }
+    .invalid .ack input { border-color: var(--err); }
+    .ack small { display: block; color: var(--dim); font-size: .84rem; margin-top: .2rem; }
+    .invalid .ack { color: var(--err); }
+    .msg { font-size: .85rem; color: var(--err); margin-top: .45rem; display: none; }
+    .invalid .msg { display: block; }
+    .submit { width: 100%; }
+    .fine { font-size: .82rem; color: var(--dim); line-height: 1.65; }
+    .fine a { color: var(--muted); }
+    .thanks { display: none; }
+    .join.done form, .join.done .form-head { display: none; }
+    .join.done .thanks { display: block; }
+    .thanks h2 { font-size: 1.8rem; }
+    .thanks p { color: var(--muted); margin-top: .8rem; }
+    .thanks .recap { margin-top: 1.2rem; border-top: 1px solid var(--line); padding-top: 1rem; font-size: .92rem; color: var(--muted); }
+    .thanks .recap b { color: var(--paper); font-weight: 600; }
+    /* ---- Variant C overrides: warmer ink, lighter type, more air ---- */
+    :root { --ink: #0E0D0C; --ink-2: #141311; --max: 1120px; --col: 36rem; --hdr: 72px; }
+    body { background: var(--ink); }
+    .display { font-weight: 300; letter-spacing: .22em; line-height: 1.2; }
+    .center { text-align: center; }
+    .col { width: min(var(--col), calc(100% - 2 * var(--safe))); margin-inline: auto; }
+    .rule { width: 72px; height: 1px; background: var(--line-strong); margin: 2.4rem auto; border: 0; }
+
+    header.site { position: sticky; top: 0; z-index: 40; background: rgba(14,13,12,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    header.site .wrap { display: flex; align-items: center; justify-content: space-between; height: var(--hdr); width: calc(100% - 2 * var(--safe)); max-width: none; }
+    .logo { height: 26px; width: auto; }
+    .textlink { font-size: .6875rem; font-weight: 400; letter-spacing: .24em; text-transform: uppercase; text-decoration: none; padding-bottom: .3rem; border-bottom: 1px solid var(--line-strong); color: var(--paper); }
+    .textlink:hover { border-color: var(--paper); }
+
+    /* Hero: centred, near full screen, nothing but the line */
+    .hero { min-height: calc(92vh - var(--hdr)); display: grid; place-items: center; padding: 5rem 0 6rem; background: radial-gradient(60% 50% at 50% 42%, rgba(237,233,225,.045), transparent 70%); }
+    .hero h1 { font-size: clamp(2.3rem, 10.5vw, 6.2rem); letter-spacing: .2em; margin: 2rem 0 0; padding-left: .2em; line-height: 1.08; }
+    .lead { color: var(--muted); font-size: 1.0625rem; max-width: 32rem; margin-inline: auto; }
+    .lead strong { color: var(--paper); font-weight: 500; }
+    .terms { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2rem 0; margin: 2.8rem auto 0; max-width: 40rem; }
+    .terms div { padding: 0 1.6rem; border-left: 1px solid var(--line); }
+    .terms div:first-child { border-left: 0; }
+    .terms dt { font-size: .5625rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--sage); }
+    .terms dd { font-size: .95rem; font-weight: 400; margin-top: .3rem; }
+    .hero .fine { max-width: 30rem; margin: 2.4rem auto 0; }
+    .hero .cue { margin-top: 3rem; }
+
+    /* Form: NAIM waitlist block, underline inputs */
+    .join-sec { padding: 7rem 0 8rem; border-top: 1px solid var(--line); }
+    .join { width: min(30rem, calc(100% - 2 * var(--safe))); margin: 0 auto; padding: 0; border: 0; scroll-margin-top: 90px; }
+    .join .form-head { text-align: center; }
+    .join h2 { font-size: clamp(1.4rem, 5vw, 2rem); letter-spacing: .18em; margin: 1rem 0 1.2rem; padding-left: .18em; }
+    .join .sub { margin: 0 auto 3rem; text-align: center; }
+    form { gap: 2rem; }
+    input[type=email], select { background: transparent; border: 0; border-bottom: 1px solid var(--line-strong); padding: .75rem 0; min-height: 48px; }
+    select { background-position: calc(100% - 8px) 50%, calc(100% - 2px) 50%; padding-right: 1.6rem; }
+    select option { background: var(--ink); color: var(--paper); }
+    .chip span { border: 0; border-bottom: 1px solid var(--line); padding: .35rem .1rem; margin-right: .9rem; font-size: .9rem; }
+    .chip span:hover { border-color: var(--line-strong); }
+    .chip input:checked + span { background: transparent; color: var(--paper); border-color: var(--paper); }
+    .ack input { background: transparent; }
+    .join .fine { text-align: center; }
+    .thanks { text-align: center; }
+    .thanks .recap { text-align: center; }
+
+    .principles { padding: 1.6rem var(--safe); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .principles ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 2.2rem; }
+    .principles li { font-size: .625rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); }
+
+    /* generic section rhythm: NAIM 160px */
+    section.block { padding: 7rem 0; }
+    section.block + section.block { border-top: 1px solid var(--line); }
+    .head { margin-bottom: 4rem; }
+    .head h2 { font-size: clamp(1.45rem, 5vw, 2.3rem); margin-top: 1.2rem; padding-left: .22em; }
+    .head p { color: var(--muted); margin: 1.6rem auto 0; max-width: var(--col); }
+    figcaption { font-size: .72rem; color: var(--dim); margin-top: .8rem; letter-spacing: .03em; }
+
+    .interlude { padding: 7rem 0 0; border-top: 1px solid var(--line); }
+    .interlude figure { width: min(22rem, calc(100% - 2 * var(--safe))); margin: 0 auto; text-align: center; }
+    .interlude img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center 30%; filter: grayscale(1) brightness(.9); }
+    /* mission: one image, then the words */
+    .mission-fig { width: min(26rem, calc(100% - 2 * var(--safe))); margin: 0 auto 5rem; }
+    .mission-fig img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: grayscale(1) brightness(.9); }
+    .mission blockquote { font-size: clamp(1.45rem, 4vw, 2.1rem); line-height: 1.35; margin: 0 auto 3.5rem; max-width: 40rem; text-align: center; }
+    .identity { list-style: none; }
+    .identity li { padding: 1.5rem 0; border-top: 1px solid var(--line); color: var(--muted); }
+    .identity li:last-child { border-bottom: 1px solid var(--line); }
+    .identity li b { display: block; color: var(--paper); font-weight: 500; margin-bottom: .25rem; }
+    .isnot { margin-top: 2.4rem; color: var(--dim); font-size: .95rem; text-align: center; }
+
+    /* the set: NAIM collection list */
+    .set-list { list-style: none; border-top: 1px solid var(--line); }
+    .piece { padding: 3rem 0 3.4rem; border-bottom: 1px solid var(--line); }
+    .piece .flat { margin: 0 auto 2.6rem; max-width: 860px; }
+    .piece .flat img { width: 100%; height: auto; opacity: .92; }
+    .piece .row { display: grid; gap: 1.2rem; }
+    .piece .code { font-size: .625rem; font-weight: 500; letter-spacing: .3em; color: var(--sage); }
+    .piece h3 { font-family: "Source Serif 4", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.6rem; letter-spacing: 0; margin-top: .3rem; }
+    .specs { list-style: none; display: grid; gap: 0; }
+    .specs li { color: var(--muted); font-size: .92rem; padding: .55rem 0; border-bottom: 1px solid rgba(237,233,225,.06); }
+    .specs li:last-child { border-bottom: 0; }
+    .set-note { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem 2.4rem; color: var(--muted); font-size: .9rem; padding-top: 2.4rem; text-align: center; }
+    .set-note b { color: var(--sage); font-weight: 500; font-size: .5625rem; letter-spacing: .3em; text-transform: uppercase; margin-right: .5rem; }
+
+    /* proof: editorial, no cards */
+    .proof { display: grid; gap: 5rem; }
+    .founder { text-align: center; }
+    .founder h3 { font-size: clamp(1.4rem, 4vw, 1.9rem); letter-spacing: .2em; margin: 1rem 0 1.6rem; padding-left: .2em; }
+    .founder p { color: var(--muted); max-width: var(--col); margin-inline: auto; }
+    .founder p + p { margin-top: 1rem; }
+    .founder .motto { color: var(--paper); font-size: 1.4rem; margin-top: 2rem; }
+    .doc { margin: 4rem auto 0; max-width: 46rem; }
+    .doc img { width: 100%; height: auto; opacity: .94; }
+    .timeline { list-style: none; border-top: 1px solid var(--line); max-width: 46rem; margin-inline: auto; }
+    .timeline li { display: grid; grid-template-columns: 1fr; gap: .4rem; padding: 1.4rem 0; border-bottom: 1px solid var(--line); }
+    .timeline li.done .when { color: var(--amber); }
+    .timeline .when { font-size: .5625rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--sage); }
+    .timeline .what { font-weight: 400; }
+    .timeline .what small { display: block; color: var(--muted); font-size: .9rem; margin-top: .2rem; }
+    .proof .built { text-align: center; margin-bottom: 1.6rem; }
+    .slots { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 2.4rem auto 0; max-width: 46rem; }
+    .slot { border: 1px dashed var(--line-strong); padding: 1.3rem; color: var(--dim); font-size: .9rem; }
+    .slot .tag { display: inline-block; font-size: .5625rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--ink); background: var(--sage); padding: .2rem .5rem; margin-bottom: .7rem; }
+    .slot .count { font-weight: 300; font-size: 2rem; letter-spacing: .14em; color: var(--muted); line-height: 1.1; }
+    body:not(.show-placeholders) .slot { display: none; }
+
+    /* inbox: NAIM pillars */
+    .inbox { display: grid; grid-template-columns: 1fr; }
+    .inbox article { padding: 2.2rem 0; border-top: 1px solid var(--line); text-align: center; }
+    .inbox h3 { font-family: "Source Serif 4", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.45rem; margin-bottom: .7rem; }
+    .inbox p { color: var(--muted); font-size: .92rem; max-width: 20rem; margin-inline: auto; }
+    .inbox .n { color: var(--dim); font-size: .5625rem; font-weight: 500; letter-spacing: .3em; display: block; margin-bottom: 1rem; }
+
+    .faq { border-top: 1px solid var(--line); max-width: 42rem; margin-inline: auto; }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary { list-style: none; cursor: pointer; padding: 1.5rem 2.5rem 1.5rem 0; position: relative; font-weight: 400; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: ""; position: absolute; right: .3rem; top: 50%; width: 11px; height: 11px; margin-top: -5px; background: linear-gradient(var(--muted), var(--muted)) center/11px 1px no-repeat, linear-gradient(var(--muted), var(--muted)) center/1px 11px no-repeat; }
+    .faq details[open] summary::after { background: linear-gradient(var(--muted), var(--muted)) center/11px 1px no-repeat; }
+    .faq details p { color: var(--muted); padding: 0 0 1.6rem; }
+
+    .closing { text-align: center; padding: 9rem 0 10rem; border-top: 1px solid var(--line); background: radial-gradient(50% 60% at 50% 50%, rgba(237,233,225,.04), transparent 70%); }
+    .closing img { width: 96px; margin: 0 auto 2.4rem; opacity: .85; }
+    .closing h2 { font-size: clamp(1.5rem, 5.5vw, 2.6rem); padding-left: .22em; }
+    .closing p.serif { color: var(--muted); margin: 1.4rem auto 2.8rem; font-size: 1.25rem; }
+
+    footer { padding: 2.6rem 0 7rem; color: var(--dim); font-size: .75rem; border-top: 1px solid var(--line); }
+    footer .wrap { display: grid; gap: 1.4rem; justify-items: center; text-align: center; }
+    footer img { height: 20px; width: auto; opacity: .8; justify-self: center; }
+    @media (min-width: 720px) { footer img { justify-self: start; } }
+    footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem 1.8rem; }
+    footer nav a { font-size: .5625rem; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; text-decoration: none; color: var(--dim); }
+
+    .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: .7rem var(--safe) calc(.7rem + env(safe-area-inset-bottom)); background: rgba(14,13,12,.96); border-top: 1px solid var(--line); display: flex; align-items: center; gap: 1rem; transform: translateY(110%); transition: transform .22s ease; }
+    .sticky.on { transform: none; }
+    .sticky .btn { flex: 1; }
+    .sticky .price { font-size: .75rem; color: var(--muted); line-height: 1.3; white-space: nowrap; }
+    .sticky .price b { display: block; color: var(--paper); font-size: .9rem; font-weight: 500; }
+
+    @media (max-width: 560px) {
+      .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 0; }
+      .terms div:nth-child(3) { border-left: 0; }
+    }
+    @media (min-width: 720px) {
+      :root { --safe: 2.5rem; }
+      .piece .row { grid-template-columns: 15rem 1fr; gap: 3rem; }
+      .inbox { grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .inbox article { border-top: 0; border-left: 1px solid var(--line); padding: 3rem 2rem; }
+      .inbox article:first-child { border-left: 0; }
+      .slots { grid-template-columns: 1fr 1fr; }
+      .timeline li { grid-template-columns: 11rem 1fr; gap: 2rem; }
+      .timeline .when { padding-top: .35rem; }
+      footer .wrap { grid-template-columns: 1fr auto 1fr; justify-items: stretch; text-align: left; }
+      footer span { justify-self: end; }
+    }
+    @media (min-width: 1024px) {
+      :root { --safe: 3rem; }
+      .hero { min-height: calc(100vh - var(--hdr)); }
+      section.block { padding: 10rem 0; }
+      .interlude { padding-top: 10rem; }
+      .interlude figure { width: 26rem; }
+      .join-sec { padding: 10rem 0; }
+      .mission-split { display: grid; grid-template-columns: 26rem 1fr; gap: 7rem; align-items: center; max-width: 1040px; margin: 0 auto; }
+      .mission-fig { margin: 0; width: 100%; }
+      .mission-split blockquote { text-align: left; margin-left: 0; }
+      .mission-split .isnot { text-align: left; }
+      .closing { padding: 12rem 0 13rem; }
+      .sticky { display: none; }
+      footer { padding-bottom: 2.6rem; }
+    }
+
+    /* ---- C2: one beat after the form ---- */
+    .beat { border-top: 1px solid var(--line); padding: 4.5rem var(--safe) 5rem; display: grid; gap: 2.4rem; justify-items: center; text-align: center; }
+    .beat-fig { width: min(18rem, 100%); }
+    .beat-fig img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: grayscale(1) brightness(.9); }
+    .beat-copy { max-width: 30rem; }
+    .beat h2 { font-size: clamp(1.4rem, 5vw, 2rem); margin: 1rem 0 1.2rem; padding-left: .22em; }
+    .beat .one { color: var(--muted); }
+    .beat .honest span { white-space: nowrap; }
+    .join .fine.refund { margin-top: -1.1rem; color: var(--muted); letter-spacing: .02em; }
+    footer span { justify-self: center !important; }
+    .beat .honest { margin: 1.8rem 0 2rem; font-size: .625rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--paper); }
+    footer .wrap { grid-template-columns: 1fr !important; justify-items: center !important; text-align: center !important; gap: .9rem; }
+    footer img { height: 18px; justify-self: center !important; }
+    @media (max-width: 719px) {
+      .hero { min-height: 0; padding: 3rem 0 3.2rem; }
+      .hero h1 { margin-top: 1.4rem; }
+      .rule { margin: 1.6rem auto; }
+      .terms { margin-top: 2rem; }
+      .hero .fine { margin-top: 1.6rem; }
+      .hero .cue { margin-top: 1.8rem; }
+      .join-sec { padding: 3.5rem 0 4.5rem; }
+      .join .sub { margin-bottom: 2.2rem; }
+    }
+    @media (min-width: 1024px) {
+      .beat { grid-template-columns: 20rem 30rem; justify-content: center; align-items: center; gap: 5rem; text-align: left; justify-items: start; padding: 7rem var(--safe); }
+      .beat-fig { width: 20rem; }
+      .beat h2 { padding-left: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  </style>
+</head>
+<!--
+  ALDINE — Drop 01 newsletter / waitlist landing page (draft, Oct 2026) — VARIANT C2
+  - No visible placeholders. A commented-out live-counter slot sits under the form; uncomment it only once
+    CONFIG.counterUrl returns a real number (the script fills #live-count).
+  - Form endpoint: CONFIG.provider = "sheet" posts to the Google Apps Script web app that writes to the "Aldine Waitlist" Google Sheet.
+    Paste the web app URL into CONFIG.sheet.url. Shopify/Klaviyo branches kept for the December move.
+-->
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a href="#top" aria-label="Aldine, back to top"><img class="logo" src="assets/aldine-logo-white.png" alt="ALDINE" width="61" height="26" /></a>
+      <a class="textlink" href="#join" data-cta="header">Join the list</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 1. HERO: identity + honest terms, centred -->
+    <section class="hero">
+      <div class="wrap center hero-copy">
+        <p class="eyebrow">Aldine · Drop 01 · The list</p>
+        <h1 class="display">Built in<br />silence.</h1>
+        <hr class="rule" />
+        <p class="lead">Quiet, dark-luxury menswear for men <strong>18 to 26</strong> who are building something alone. Sold only as <strong>complete matching sets</strong>. Small tonal mark. Nothing loud.</p>
+        <dl class="terms" aria-label="Drop 01 at a glance">
+          <div><dt>The set</dt><dd>Shirt + chino</dd></div>
+          <div><dt>Price</dt><dd>$250 per set</dd></div>
+          <div><dt>How</dt><dd>Preorder</dd></div>
+          <div><dt>When</dt><dd>About Mar 2027</dd></div>
+        </dl>
+        <p class="fine">Planned first run of 100 sets, factory-made from our own tech packs. The list gets 48 hours of early access before the preorder opens to anyone else. That is the only perk. No discount codes.</p>
+        <p class="cue"><a class="btn" href="#join" data-cta="hero">Join the list</a></p>
+      </div>
+    </section>
+
+    <!-- THE FORM (single form; every CTA on the page points here) -->
+    <section class="join-sec">
+      <aside class="join" id="join" aria-labelledby="join-title">
+          <div class="form-head">
+            <p class="eyebrow">Drop 01 list</p>
+            <h2 class="display" id="join-title">Hear first. Decide later.</h2>
+            <p class="sub">Build notes about twice a month, then the preorder date the moment it's real. Joining costs nothing and commits you to nothing.</p>
+          </div>
+
+          <!--
+            TODO(endpoint): this form posts via JS (see CONFIG.provider below).
+            Shopify option: if this page becomes a Shopify page/section, replace this <form> with
+              {% form 'customer' %} ... <input type="hidden" name="contact[tags]" id="contact-tags"> ... {% endform %}
+            and let the script fill contact[tags]. Klaviyo option: set CONFIG.provider = "klaviyo" with your public key + list id.
+          -->
+          <form id="signup" novalidate>
+            <div class="field" data-field="email">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="email-msg" />
+              <p class="msg" id="email-msg" role="alert">Enter an email address that can receive a confirmation.</p>
+            </div>
+
+            <div class="field" data-field="size">
+              <label for="size">Your usual shirt size</label>
+              <select id="size" name="size" required aria-describedby="size-msg">
+                <option value="" selected disabled>Choose a size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="unsure">Not sure yet</option>
+              </select>
+              <p class="msg" id="size-msg" role="alert">Pick a size, or "Not sure yet". It only helps plan the run.</p>
+            </div>
+
+            <div class="field" data-field="ack">
+              <label class="ack" for="ack">
+                <input id="ack" name="ack" type="checkbox" value="yes" required aria-describedby="ack-msg" />
+                <span>I understand Drop 01 is a $250 preorder set.
+                  <small>Shirt and chino, sold together. Ships after the preorder window closes.</small></span>
+              </label>
+              <p class="msg" id="ack-msg" role="alert">Tick this so we only email people who know what Drop 01 is.</p>
+            </div>
+
+            <!-- Optional qualifier, kept below the required fields (one tap, never blocks submit). Feeds lead_score. -->
+            <fieldset class="field" data-field="draw">
+              <legend>What draws you to Aldine <span class="opt">· optional, one tap</span></legend>
+              <div class="chips">
+                <label class="chip"><input type="radio" name="draw" value="the-set" /><span>The set itself</span></label>
+                <label class="chip"><input type="radio" name="draw" value="the-mission" /><span>The mission</span></label>
+                <label class="chip"><input type="radio" name="draw" value="the-build" /><span>Watching it get built</span></label>
+                <label class="chip"><input type="radio" name="draw" value="curious" /><span>Just curious</span></label>
+              </div>
+            </fieldset>
+
+            <!-- Hidden attribution fields, filled by script for segmentation -->
+            <input type="hidden" name="utm_source" />
+            <input type="hidden" name="utm_medium" />
+            <input type="hidden" name="utm_campaign" />
+            <input type="hidden" name="ref" />
+            <input type="hidden" name="src" />
+            <!-- Honeypot: real people never see or fill this; bots that do are dropped by the Apps Script. -->
+            <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+
+            <button class="btn submit" type="submit" data-cta="form">Join the list</button>
+            <p class="fine refund">Full refund any time before it ships.</p>
+            <p class="fine">We only email you about Aldine. One-click unsubscribe, always. We never share your email.
+              <!-- TODO(Jazen): link a privacy policy page here before launch. --></p>
+          </form>
+
+          <div class="thanks" id="thanks" role="status" aria-live="polite" tabindex="-1">
+            <p class="eyebrow" style="color:var(--amber)">You're in</p>
+            <h2 class="display">You're on the list.</h2>
+            <p>We saved <b id="t-email" style="color:var(--paper)"></b> to the Drop 01 list. Nothing else to do.</p>
+            <p>First build notes go out in December. Until then, nothing.</p>
+            <div class="recap" id="t-recap"></div>
+          </div>
+      </aside>
+      <!-- PLACEHOLDER (commented out): live sign-up counter. TODO: wire to Klaviyo list count / Shopify customer count via a small server endpoint,
+           set CONFIG.counterUrl, then uncomment the block below AND add class="show-placeholders" to <body> (the .slot is hidden without it).
+           Only show a real number; never seed it. Testimonials stay off this page until real sample wearers give permission.
+      <div class="slot" data-slot="counter" aria-hidden="true" style="width:min(30rem,calc(100% - 2.5rem));margin:2.4rem auto 0">
+        <span class="tag">Placeholder</span>
+        <div class="count" id="live-count">— —</div>
+        <p>Live sign-up counter. Connects to the email provider later. Shows a real number or nothing.</p>
+      </div>
+      -->
+    </section>
+
+    <!-- ONE BEAT: who it's for + the set + honest terms, then back to the form -->
+    <section class="beat" aria-label="Who it's for">
+      <figure class="beat-fig">
+        <img src="assets/hero-field.jpg" alt="A lone man standing in tall grass, black and white" width="736" height="915" loading="lazy" />
+        <figcaption>Styling reference, not Aldine product.</figcaption>
+      </figure>
+      <div class="beat-copy">
+        <p class="eyebrow">Who it's for</p>
+        <h2 class="display">The climb, done quietly.</h2>
+        <p class="one">For men building something alone. One considered outfit, not one loud piece: the ALD-005 paper button-down and ALD-003 straight chino, sold only as a set.</p>
+        <p class="honest"><span>$250 set</span> · <span>preorder ~Mar 2027</span> · <span>no discounts</span> · <span>free to join</span></p>
+        <a class="textlink" href="#join" data-cta="closing">Join the list</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <img src="assets/aldine-snake-white.png" alt="" width="44" height="20" loading="lazy" />
+      <span>Live a life worth living. · © 2026 Aldine</span>
+      <!-- TODO(Jazen): add Instagram/TikTok handles once posting starts in December; add privacy policy link. -->
+    </div>
+  </footer>
+
+  <div class="sticky" id="sticky" aria-hidden="true">
+    <span class="price"><b>$250 set</b>Preorder ~Mar 2027</span>
+    <a class="btn" href="#join" data-cta="sticky" tabindex="-1">Join the list</a>
+  </div>
+
+  <script>
+  /* =====================================================================
+     CONFIG — the only part to change when wiring the real list
+     ===================================================================== */
+  const CONFIG = {
+    // TODO(endpoint): choose one. "demo" stores locally and shows the thank-you state.
+    //   "shopify" -> posts the Shopify customer form (works when this page is served from the Shopify store;
+    //                turn on double opt-in in Shopify admin: Settings > Customer accounts/Marketing > email confirmation).
+    //   "klaviyo" -> Klaviyo client subscriptions API (enable double opt-in on the list in Klaviyo).
+    provider: "sheet",
+    // Google Sheet backend (free). Paste the Apps Script web app URL (ends in /exec) between the quotes.
+    sheet: { url: "https://script.google.com/macros/s/AKfycbyjIzicEN5meLe6DzGSt0i1zFttyj_oOlhH85IqGGx3Dn9sHKRiFSoHr34nkMzHqR-y/exec" },
+    shopify: { action: "/contact#contact_form" },
+    klaviyo: {
+      publicKey: "TODO_KLAVIYO_PUBLIC_API_KEY", // 6-char site id, safe to expose
+      listId: "TODO_KLAVIYO_LIST_ID",
+      revision: "2024-10-15" // TODO: confirm current revision in Klaviyo API docs
+    },
+    // TODO(counter): URL returning {"count": 123}. Leave null to keep the placeholder.
+    counterUrl: null
+  };
+
+  (function () {
+    const $ = (s, r = document) => r.querySelector(s);
+    const form = $("#signup"), join = $("#join");
+    const params = new URLSearchParams(location.search);
+
+    // Attribution for segmentation (where warm vs cold traffic comes from)
+    ["utm_source", "utm_medium", "utm_campaign"].forEach(k => { form.elements[k].value = params.get(k) || ""; });
+    form.elements.ref.value = params.get("ref") || (document.referrer ? new URL(document.referrer).hostname : "direct");
+    // Where the link was shared (?src=tiktok, ?src=instagram, ...). Falls back to utm_source, then the referrer.
+    form.elements.src.value = (params.get("src") || params.get("utm_source") || form.elements.ref.value || "direct").toLowerCase().replace(/[^a-z0-9-]+/g, "-").slice(0, 40);
+
+    // Analytics hook (GA4/GTM/Shopify pixel can listen to dataLayer). No email is ever pushed.
+    window.dataLayer = window.dataLayer || [];
+    const track = (event, data = {}) => window.dataLayer.push({ event, ...data });
+    document.querySelectorAll("[data-cta]").forEach(a => a.addEventListener("click", () => track("aldine_cta_click", { cta: a.dataset.cta })));
+    let started = false;
+    form.addEventListener("input", () => { if (!started) { started = true; track("aldine_form_start"); } });
+
+    // Validation
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    function setInvalid(name, bad) { const f = form.querySelector(`[data-field="${name}"]`); f.classList.toggle("invalid", bad); const i = f.querySelector("input,select"); if (i) i.setAttribute("aria-invalid", bad ? "true" : "false"); }
+    function validate() {
+      const email = form.email.value.trim(), size = form.size.value, ack = form.ack.checked;
+      const errs = { email: !EMAIL_RE.test(email), size: !size, ack: !ack };
+      Object.entries(errs).forEach(([k, v]) => setInvalid(k, v));
+      return !Object.values(errs).some(Boolean);
+    }
+    // Errors appear only on submit; they clear live while typing (no blur-time layout shifts that eat clicks).
+    form.email.addEventListener("input", () => { const f = form.querySelector('[data-field="email"]'); if (f.classList.contains("invalid") && EMAIL_RE.test(form.email.value.trim())) setInvalid("email", false); });
+    form.size.addEventListener("change", () => setInvalid("size", !form.size.value));
+    form.ack.addEventListener("change", () => setInvalid("ack", !form.ack.checked));
+
+    // Lead segmentation: warm / mid / cold, from the qualifiers. Kept simple so it can be re-scored later.
+    function segment(d) {
+      let score = 0;
+      if (d.ack) score += 2;                             // accepted price + preorder up front
+      if (d.size && d.size !== "unsure") score += 1;     // knows his size = closer to buying
+      if (d.draw === "the-set") score += 2;
+      else if (d.draw === "the-mission" || d.draw === "the-build") score += 1;
+      else if (d.draw === "curious") score -= 1;
+      return { score, temp: score >= 4 ? "warm" : score >= 2 ? "mid" : "cold" };
+    }
+
+    function collect() {
+      const fd = new FormData(form);
+      const d = {
+        email: fd.get("email").trim().toLowerCase(),
+        size: fd.get("size"),
+        draw: fd.get("draw") || "none",
+        ack: form.ack.checked,
+        utm_source: fd.get("utm_source"), utm_medium: fd.get("utm_medium"), utm_campaign: fd.get("utm_campaign"), ref: fd.get("ref"),
+        source: fd.get("src") || "direct", website: fd.get("website") || "",
+        signed_up_at: new Date().toISOString(), page: "drop01-list-c2"
+      };
+      const seg = segment(d);
+      d.lead_score = seg.score; d.lead_temp = seg.temp;
+      // Shopify customer tags (Shopify segments filter on these)
+      d.tags = ["aldine-list", "drop01", "price-ack-250", `size-${d.size}`, `draw-${d.draw}`, `lead-${seg.temp}`, `src-${d.source}`]
+        .map(t => t.toLowerCase().replace(/[^a-z0-9-]+/g, "-")).join(", ");
+      return d;
+    }
+
+    async function send(d) {
+      if (CONFIG.provider === "sheet") {
+        // Google Apps Script web app -> appends one row to the "Aldine Waitlist" Sheet.
+        if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(CONFIG.sheet.url)) throw new Error("sheet url not set");
+        const body = new URLSearchParams();
+        ["email", "size", "draw", "lead_temp", "lead_score", "source", "utm_source", "utm_medium", "utm_campaign", "ref", "page", "tags", "website"]
+          .forEach(k => body.append(k, d[k] == null ? "" : String(d[k])));
+        // no-cors: Apps Script doesn't send CORS headers; the row is still written. A network failure still throws.
+        await fetch(CONFIG.sheet.url, { method: "POST", mode: "no-cors", body });
+      } else if (CONFIG.provider === "shopify") {
+        // Shopify customer form: creates/updates a customer subscribed to email marketing, with tags.
+        const body = new URLSearchParams({ form_type: "customer", utf8: "✓", "contact[email]": d.email, "contact[tags]": d.tags, "contact[accepts_marketing]": "true" });
+        const r = await fetch(CONFIG.shopify.action, { method: "POST", body, headers: { "Content-Type": "application/x-www-form-urlencoded" } });
+        if (!r.ok) throw new Error("shopify " + r.status);
+      } else if (CONFIG.provider === "klaviyo") {
+        // Klaviyo client subscription (double opt-in follows the list setting). Qualifiers stored as profile properties.
+        const r = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${CONFIG.klaviyo.publicKey}`, {
+          method: "POST", headers: { "Content-Type": "application/json", revision: CONFIG.klaviyo.revision },
+          body: JSON.stringify({ data: { type: "subscription", attributes: {
+            custom_source: "Aldine Drop 01 landing",
+            profile: { data: { type: "profile", attributes: { email: d.email, properties: {
+              aldine_size: d.size, aldine_draw: d.draw, aldine_price_ack: d.ack, aldine_lead_temp: d.lead_temp, aldine_lead_score: d.lead_score,
+              utm_source: d.utm_source, utm_medium: d.utm_medium, utm_campaign: d.utm_campaign, ref: d.ref } } } } },
+            relationships: { list: { data: { type: "list", id: CONFIG.klaviyo.listId } } } } })
+        });
+        if (!r.ok && r.status !== 202) throw new Error("klaviyo " + r.status);
+      } else {
+        // DEMO: keep a local copy so the flow can be tested without a provider.
+        const prev = JSON.parse(localStorage.getItem("aldine-list-demo") || "[]");
+        prev.push(d); localStorage.setItem("aldine-list-demo", JSON.stringify(prev));
+        await new Promise(r => setTimeout(r, 350));
+      }
+    }
+
+    const LABELS = { "the-set": "the set itself", "the-mission": "the mission", "the-build": "watching it get built", "curious": "just curious", "none": "not answered" };
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!validate()) { const first = form.querySelector(".invalid input, .invalid select"); if (first) first.focus(); track("aldine_form_invalid"); return; }
+      const btn = form.querySelector(".submit"); btn.disabled = true; btn.textContent = "Sending…";
+      const d = collect();
+      try {
+        await send(d);
+        track("aldine_signup", { size: d.size, draw: d.draw, lead_temp: d.lead_temp, lead_score: d.lead_score, utm_source: d.utm_source, ref: d.ref });
+        $("#t-email").textContent = d.email;
+        $("#t-recap").innerHTML = `Saved: size <b>${d.size === "unsure" ? "not sure yet" : d.size}</b> · drawn by <b>${LABELS[d.draw]}</b> · <b>$250 preorder</b> understood.`;
+        join.classList.add("done");
+        $("#thanks").focus({ preventScroll: true });
+        join.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (err) {
+        btn.disabled = false; btn.textContent = "Join the list";
+        alert("That didn't go through. Please try again in a moment.");
+        track("aldine_form_error", { message: String(err) });
+      }
+    });
+
+    // Live counter (placeholder until CONFIG.counterUrl exists). Shows real numbers only.
+    if (CONFIG.counterUrl) {
+      fetch(CONFIG.counterUrl).then(r => r.json()).then(j => {
+        if (Number.isFinite(j.count)) { const el = $("#live-count"); el.textContent = j.count.toLocaleString() + " on the list"; el.closest(".slot").querySelector(".tag").remove(); }
+      }).catch(() => {});
+    }
+
+    // Mobile sticky CTA: visible after the hero, hidden while the form is on screen.
+    const sticky = $("#sticky");
+    if ("IntersectionObserver" in window) {
+      let formVisible = true, pastHero = false;
+      const upd = () => sticky.classList.toggle("on", pastHero && !formVisible && !join.classList.contains("done"));
+      new IntersectionObserver(([en]) => { formVisible = en.isIntersecting; upd(); }, { threshold: 0.15 }).observe(join);
+      new IntersectionObserver(([en]) => { pastHero = !en.isIntersecting; upd(); }).observe($(".hero-copy h1"));
+    }
+  })();
+  </script>
+</body>
+</html>
